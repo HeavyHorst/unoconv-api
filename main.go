@@ -13,9 +13,15 @@ import (
 var (
 	cfg config
 	mw  middleware
+	uno *unoconv
 )
 
 func init() {
+	// read config data
+	cfg.initDefaultConfig()
+
+	uno = initUnoconv()
+
 	//plug the xlog handler's input to Go's default logger
 	log.SetFlags(0)
 	xlogger := xlog.New(cfg.loggerConfig)

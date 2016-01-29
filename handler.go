@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/rs/xlog"
@@ -41,9 +40,10 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 
 	//Run unoconv to convert the file
 	//unoconv's stdout is plugged directly to the httpResponseWriter
-	cmd := exec.Command("unoconv", "-f", xmux.Param(ctx, "filetype"), "--stdout", filename)
-	cmd.Stdout = w
-	err = cmd.Run()
+	//cmd := exec.Command("unoconv", "-f", xmux.Param(ctx, "filetype"), "--stdout", filename)
+	//cmd.Stdout = w
+	//err = cmd.Run()
+	err = uno.convert(filename, xmux.Param(ctx, "filetype"), w)
 	if err != nil {
 		l.Error(err)
 		return
