@@ -30,6 +30,10 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 
 	//create a temporary file and copy the file from the form to it
 	tempfile, err := ioutil.TempFile(os.TempDir(), "unoconv-api")
+	if err != nil {
+		l.Error(err)
+		return
+	}
 	io.Copy(tempfile, file)
 	tempfile.Close()
 
@@ -40,9 +44,6 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 
 	//Run unoconv to convert the file
 	//unoconv's stdout is plugged directly to the httpResponseWriter
-	//cmd := exec.Command("unoconv", "-f", xmux.Param(ctx, "filetype"), "--stdout", filename)
-	//cmd.Stdout = w
-	//err = cmd.Run()
 	err = uno.convert(filename, xmux.Param(ctx, "filetype"), w)
 	if err != nil {
 		l.Error(err)
