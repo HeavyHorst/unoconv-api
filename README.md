@@ -1,3 +1,5 @@
+[![Build Status](https://drone.io/github.com/HeavyHorst/unoconv-api/status.png)](https://drone.io/github.com/HeavyHorst/unoconv-api/latest)
+
 # unoconv-api
 
 # Run - example
