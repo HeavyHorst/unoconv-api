@@ -1,14 +1,14 @@
 package main
 
 import (
-	"net/http"
+	"io"
 	"os/exec"
 )
 
 type request struct {
 	filename string
 	filetype string
-	w        http.ResponseWriter
+	w        io.Writer
 	errChan  chan error
 }
 
@@ -39,7 +39,7 @@ func initUnoconv() *unoconv {
 	return uno
 }
 
-func (u *unoconv) convert(filename, filetype string, w http.ResponseWriter) error {
+func (u *unoconv) convert(filename, filetype string, w io.Writer) error {
 	err := make(chan error)
 	req := request{
 		filename,
