@@ -13,11 +13,13 @@ RUN \
 	    apt-get upgrade -y && \
 		apt-get install -y \
 			unoconv \
+			supervisor \
 			golang-go \
 	&& \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/
 
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD . /go/src/github.com/HeavyHorst/unoconv-api
 RUN go install github.com/HeavyHorst/unoconv-api
 
@@ -25,4 +27,4 @@ RUN go install github.com/HeavyHorst/unoconv-api
 EXPOSE 3000
 
 # Startup
-ENTRYPOINT /usr/bin/unoconv --listener --server=0.0.0.0 --port=2002 && /go/bin/unoconv-api
+ENTRYPOINT ["/usr/bin/supervisord"]
