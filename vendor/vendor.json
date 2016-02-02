@@ -3,6 +3,11 @@
 	"ignore": "test",
 	"package": [
 		{
+			"path": "github.com/qiniu/iconv",
+			"revision": "4c8758f4d583f3df36bcb648571126eca14a44a5",
+			"revisionTime": "2015-02-12T03:08:00+08:00"
+		},
+		{
 			"path": "github.com/rs/xaccess",
 			"revision": "887177f7ce212875f957c8cb0976076f79b267f3",
 			"revisionTime": "2015-12-06T23:37:04-08:00"
@@ -36,6 +41,11 @@
 			"path": "github.com/rs/xstats",
 			"revision": "463f7e23a1b5f187b806f58c7a2d4b7c3cc4d3a9",
 			"revisionTime": "2015-12-10T15:31:31-08:00"
+		},
+		{
+			"path": "github.com/saintfish/chardet",
+			"revision": "3af4cd4741ca4f3eb0c407c034571a6fb0ea529c",
+			"revisionTime": "2012-08-15T23:12:21-07:00"
 		},
 		{
 			"path": "github.com/zenazn/goji/web/mutil",

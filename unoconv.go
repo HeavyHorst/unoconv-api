@@ -25,7 +25,7 @@ func initUnoconv() *unoconv {
 		for {
 			select {
 			case data := <-uno.requestChan:
-				cmd := exec.Command("unoconv", "-f", data.filetype, "--stdout", data.filename)
+				cmd := exec.Command("unoconv", "-f", data.filetype, "--stdout", "-i", "FilterOptions=76", "-e", "FilterOptions=76", data.filename)
 				cmd.Stdout = data.w
 				err := cmd.Run()
 				if err != nil {
