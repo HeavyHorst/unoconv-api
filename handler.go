@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -34,7 +35,30 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 		l.Error(err)
 		return
 	}
-	io.Copy(tempfile, file)
+
+	switch filepath.Ext(handler.Filename) {
+	case ".txt":
+		//read the files content
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			l.Error(err)
+			return
+		}
+
+		//try to convert the textfile (data) to utf-8 and write it to tempfile
+		charset, err := toUTF8(data, tempfile)
+		l.SetField("charset", charset)
+		l.SetField("convertedToUTF8", true)
+		if err != nil {
+			//Could not convert to utf-8, write the original data to tempfile
+			l.Error(err)
+			l.SetField("convertedToUTF8", false)
+			io.Copy(tempfile, bytes.NewBuffer(data))
+		}
+	default:
+		io.Copy(tempfile, file)
+	}
+
 	tempfile.Close()
 
 	//append the file extension to the temporary file's name
