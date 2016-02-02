@@ -12,6 +12,8 @@ ENV LANG de_DE.UTF-8
 ENV LANGUAGE de_DE:de  
 ENV LC_ALL de_DE.UTF-8  
 
+ADD . /go/src/github.com/HeavyHorst/unoconv-api
+
 #Install unoconv
 RUN \
 	apt-get update && \
@@ -21,19 +23,14 @@ RUN \
 			unoconv \
 			gcc \
 			supervisor \
-			golang-go
+			golang-go && \
+		go install github.com/HeavyHorst/unoconv-api && \
+        apt-get remove -y golang-go gcc && \
+	    apt-get autoremove -y && \
+        apt-get clean && \
+	    rm -rf /var/lib/apt/lists/
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD . /go/src/github.com/HeavyHorst/unoconv-api
-RUN go install github.com/HeavyHorst/unoconv-api
-
-
-RUN \
-    apt-get remove -y golang-go gcc && \
-	apt-get autoremove -y && \
-    apt-get clean && \
-	rm -rf /var/lib/apt/lists/
-
 
 # Expose 3000
 EXPOSE 3000
