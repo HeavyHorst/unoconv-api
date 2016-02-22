@@ -37,7 +37,7 @@ func init() {
 func main() {
 	router := xmux.New()
 
-	router.GET("/unoconv/health", xhandler.HandlerFuncC(HealthHandler))
+	router.GET("/unoconv/health", xhandler.HandlerFuncC(healthHandler))
 	router.POST("/unoconv/:filetype", xhandler.HandlerFuncC(unoconvHandler))
 	log.Fatal(http.ListenAndServe(":3000", mw.Handler(router)))
 }
