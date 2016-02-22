@@ -13,6 +13,13 @@ import (
 	"golang.org/x/net/context"
 )
 
+func HealthHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	// just return http.StatusOK
+	l := xlog.FromContext(ctx)
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("200 -OK"))
+}
+
 func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	l := xlog.FromContext(ctx)
 
