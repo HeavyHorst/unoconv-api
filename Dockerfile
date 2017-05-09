@@ -1,4 +1,4 @@
-FROM ubuntu:wily
+FROM ubuntu:xenial
 
 MAINTAINER Rene Kaufmann <kaufmann.r@gmail.com>
 
