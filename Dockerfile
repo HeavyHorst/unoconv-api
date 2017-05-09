@@ -6,12 +6,6 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 ENV GO15VENDOREXPERIMENT 1
 
-# Set the locale
-RUN locale-gen de_DE.UTF-8  
-ENV LANG de_DE.UTF-8  
-ENV LANGUAGE de_DE:de  
-ENV LC_ALL de_DE.UTF-8  
-
 ADD . /go/src/github.com/HeavyHorst/unoconv-api
 
 #Install unoconv
@@ -20,6 +14,7 @@ RUN \
 	DEBIAN_FRONTEND=noninteractive \
 	    apt-get upgrade -y && \
 		apt-get install -y \
+		        locales \
 			unoconv \
 			gcc \
 			supervisor \
@@ -29,6 +24,12 @@ RUN \
 	    apt-get autoremove -y && \
         apt-get clean && \
 	    rm -rf /var/lib/apt/lists/
+
+# Set the locale
+RUN locale-gen de_DE.UTF-8  
+ENV LANG de_DE.UTF-8  
+ENV LANGUAGE de_DE:de  
+ENV LC_ALL de_DE.UTF-8  
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
