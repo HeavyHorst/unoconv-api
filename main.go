@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"log"
 	"net/http"
 
@@ -34,10 +35,18 @@ func init() {
 	)
 }
 
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 func main() {
 	router := xmux.New()
+	addr := getEnv("LISTEN_ADDR", ":3000")
 
 	router.GET("/unoconv/health", xhandler.HandlerFuncC(healthHandler))
 	router.POST("/unoconv/:filetype", xhandler.HandlerFuncC(unoconvHandler))
-	log.Fatal(http.ListenAndServe(":3000", mw.Handler(router)))
+	log.Fatal(http.ListenAndServe(addr, mw.Handler(router)))
 }
