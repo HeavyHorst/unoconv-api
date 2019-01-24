@@ -14,9 +14,13 @@ import (
 )
 
 func healthHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	// just return http.StatusOK
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("200 -OK"))
+	if checkUnoconv(uno) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("200 -OK"))
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 -StatusInternalServerError"))
+	}
 }
 
 func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
