@@ -1,7 +1,5 @@
 github.com/okzk/sdnotify v0.0.0-20180710141335-d9becc38acbd h1:+iAPaTbi1gZpcpDwe/BW1fx7Xoesv69hLNGPheoyhBs=
 github.com/okzk/sdnotify v0.0.0-20180710141335-d9becc38acbd/go.mod h1:4soZNh0zW0LtYGdQ416i0jO0EIqMGcbtaspRS4BDvRQ=
-github.com/qiniu/iconv v0.0.0-20150211190800-4c8758f4d583 h1:EMNB6OHB+AibvgJtgONOMc0gmztcFKdKmZfg7+VCeEQ=
-github.com/qiniu/iconv v0.0.0-20150211190800-4c8758f4d583/go.mod h1:70MR/wDOhFn6Yf10KP+jVqF0W16hKVhdhy38IMuNzKM=
 github.com/rs/xaccess v0.0.0-20151207073704-887177f7ce21 h1:DjpEQMQwoM9SExKVDJ/yFAP+7l6b5jE2dbqRIayMpqk=
 github.com/rs/xaccess v0.0.0-20151207073704-887177f7ce21/go.mod h1:he5kXRmw8ajCYHpcXNno5IYxodyENhcVMp7FQd+qeHM=
 github.com/rs/xhandler v0.0.0-20151224012956-d9d9599b6aaf h1:Df4QtDSQdFg5jenZonLrGr7iREOI/YAwYp18P7xjwPk=
@@ -20,3 +18,5 @@ github.com/zenazn/goji v0.0.0-20151120200311-bf843a174a08 h1:bIsHnPMOikkee9C709x
 github.com/zenazn/goji v0.0.0-20151120200311-bf843a174a08/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
 golang.org/x/net v0.0.0-20151224034648-ea6dba8c9388 h1:gB57lkY+/xkEp0eAu0hbSQ+OIoOe6SMzO5Nsa903xRs=
 golang.org/x/net v0.0.0-20151224034648-ea6dba8c9388/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+gopkg.in/iconv.v1 v1.1.1 h1:vEMwCC9GC3uAvOTjVMUzK9HaSOwH7swU2qzKQP+3N9s=
+gopkg.in/iconv.v1 v1.1.1/go.mod h1:/kbQb/JfuKJjly48VfSKmiHkdA0nAzSsgDWOc3Jcb08=

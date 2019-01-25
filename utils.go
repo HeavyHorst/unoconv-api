@@ -1,10 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"io"
 
-	"github.com/qiniu/iconv"
+	"gopkg.in/iconv.v1"
 	"github.com/saintfish/chardet"
 )
 
@@ -17,8 +16,8 @@ func getFileEncoding(data []byte) (string, error) {
 	return r.Charset, nil
 }
 
-func toUTF8(file []byte, tempfile io.Writer) (string, error) {
-	charset, err := getFileEncoding(file)
+func toUTF8(data []byte, tempfile io.Writer) (string, error) {
+	charset, err := getFileEncoding(data)
 	if err != nil {
 		return "", err
 	}
@@ -29,9 +28,11 @@ func toUTF8(file []byte, tempfile io.Writer) (string, error) {
 	}
 	defer cd.Close()
 
-	bufSize := 0
-	reader := iconv.NewReader(cd, bytes.NewBuffer(file), bufSize)
+	autoSync := false // buffered or not
+	bufSize := 0 // default if zero
+	w := iconv.NewWriter(cd, tempfile, bufSize, autoSync)
+	w.Write(data)
+	w.Sync()
 
-	io.Copy(tempfile, reader)
 	return charset, nil
 }
