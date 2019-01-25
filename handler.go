@@ -14,9 +14,13 @@ import (
 )
 
 func healthHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	// just return http.StatusOK
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("200 -OK"))
+	if checkUnoconv(uno) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("200 -OK"))
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 -StatusInternalServerError"))
+	}
 }
 
 func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
@@ -35,16 +39,18 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 	//add the filename to access log
 	l.SetField("filename", handler.Filename)
 
-	//create a temporary file and copy the file from the form to it
-	tempfile, err := ioutil.TempFile(os.TempDir(), "unoconv-api")
+	extension := filepath.Ext(handler.Filename)
+	//create a temporary file, to copy the POSTed file data into it
+	tempfile, err := ioutil.TempFile(os.TempDir(), "unoconv-api*" + extension)
 	if err != nil {
 		l.Error(err)
 		return
 	}
+	defer os.Remove(tempfile.Name())
 
-	switch filepath.Ext(handler.Filename) {
+	switch extension {
 	case ".txt":
-		//read the files content
+		//special handling for plain text files, try to detect the charset and convert to utf8
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
 			l.Error(err)
@@ -62,19 +68,15 @@ func unoconvHandler(ctx context.Context, w http.ResponseWriter, r *http.Request)
 			io.Copy(tempfile, bytes.NewBuffer(data))
 		}
 	default:
+		//just copy all other file types
 		io.Copy(tempfile, file)
 	}
 
 	tempfile.Close()
 
-	//append the file extension to the temporary file's name
-	filename := tempfile.Name() + filepath.Ext(handler.Filename)
-	os.Rename(tempfile.Name(), filename)
-	defer os.Remove(filename)
-
 	//Run unoconv to convert the file
 	//unoconv's stdout is plugged directly to the httpResponseWriter
-	err = uno.convert(filename, xmux.Param(ctx, "filetype"), w)
+	err = uno.convert(tempfile.Name(), xmux.Param(ctx, "filetype"), w)
 	if err != nil {
 		l.Error(err)
 		return
