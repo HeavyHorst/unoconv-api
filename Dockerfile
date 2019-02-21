@@ -35,5 +35,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Expose 3000
 EXPOSE 3000
 
+HEALTHCHECK --interval=30s --timeout=10s \
+    CMD curl http://localhost:3000/unoconv/health
+
 # Startup
 ENTRYPOINT ["/usr/bin/supervisord"]
