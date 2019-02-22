@@ -1,12 +1,14 @@
+FROM golang:1.11 as api-builder
+WORKDIR /unoconv-api
+COPY . /unoconv-api
+RUN go build
+
+
 FROM ubuntu:xenial
 
-MAINTAINER Rene Kaufmann <kaufmann.r@gmail.com>
+LABEL maintainer="kaufmann.r@gmail.com"
 
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
-ENV GO15VENDOREXPERIMENT 1
-
-ADD . /go/src/github.com/HeavyHorst/unoconv-api
+COPY --from=api-builder /unoconv-api/unoconv-api /opt/unoconv-api/unoconv-api
 
 #Install unoconv
 RUN \
@@ -16,14 +18,11 @@ RUN \
 		apt-get install -y \
 		        locales \
 			unoconv \
-			gcc \
-			supervisor \
-			golang-go && \
-		go install github.com/HeavyHorst/unoconv-api && \
-        apt-get remove -y golang-go gcc && \
+			supervisor && \
+        apt-get remove -y && \
 	    apt-get autoremove -y && \
         apt-get clean && \
-	    rm -rf /var/lib/apt/lists/
+			rm -rf /var/lib/apt/lists/
 
 # Set the locale
 RUN locale-gen de_DE.UTF-8  
@@ -35,6 +34,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose 3000
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s \
+    CMD curl http://localhost:3000/unoconv/health
 
 # Startup
 ENTRYPOINT ["/usr/bin/supervisord"]
