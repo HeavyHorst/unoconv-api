@@ -75,8 +75,13 @@ func getEnv(key, fallback string) string {
 func main() {
 	router := xmux.New()
 	addr := getEnv("LISTEN_ADDR", ":3000")
+	certFile := getEnv("LISTEN_CERTFILE", "")
+	keyFile := getEnv("LISTEN_KEYFILE", "")
 
 	router.GET("/unoconv/health", xhandler.HandlerFuncC(healthHandler))
 	router.POST("/unoconv/:filetype", xhandler.HandlerFuncC(unoconvHandler))
+	if certFile != "" && keyFile != "" {
+		log.Fatal(http.ListenAndServeTLS(addr, certFile, keyFile, mw.Handler(router)))
+	}
 	log.Fatal(http.ListenAndServe(addr, mw.Handler(router)))
 }
